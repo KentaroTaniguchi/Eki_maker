@@ -76,13 +76,17 @@ namespace Eki_maker
             IExpDiaCourse_A2 couseget = (IExpDiaCourse_A2)axExpDiaShowCoursePanel131.ExpDiaCourse_A2;
 
             //JSONに入れたい探索結果情報
-            var route = new cousedate();
+            cousedate route = new cousedate();
             route.Name = couseget.DDEStyleString2;
             route.TotalTime = couseget.TotalTime;
 
+            SaveFileDialog sfd = new SaveFileDialog();
+            if (sfd.ShowDialog() == DialogResult.OK) {
+                System.IO.Stream stream   ;
+                stream = sfd.OpenFile();
+            }
             
             var json = JsonConvert.SerializeObject(route,Formatting.Indented);
-
             System.IO.StreamWriter sw = new System.IO.StreamWriter(
                 @"C:\Users\kentaro\Desktop\SDKを使ったプログラム\Eki_maker\Eki_maker\bin\Debug\routedata.json", false, System.Text.Encoding.GetEncoding("shift_jis"));
             frmResult fm = new frmResult();
