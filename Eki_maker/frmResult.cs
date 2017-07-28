@@ -79,15 +79,23 @@ namespace Eki_maker
             cousedate route = new cousedate();
             route.Name = couseget.DDEStyleString2;
             route.TotalTime = couseget.TotalTime;
-
+            var json = JsonConvert.SerializeObject(route, Formatting.Indented);
             SaveFileDialog sfd = new SaveFileDialog();
             if (sfd.ShowDialog() == DialogResult.OK) {
                 System.IO.Stream stream   ;
                 stream = sfd.OpenFile();
+                if(stream != null)
+                {
+                    System.IO.StreamWriter sw1 = new System.IO.StreamWriter(stream);
+                    sw1.Write(json);
+                    sw1.Close();
+                    stream.Close();
+                    this.Close();
+                }
             }
             
-            var json = JsonConvert.SerializeObject(route,Formatting.Indented);
-            System.IO.StreamWriter sw = new System.IO.StreamWriter(
+           
+          /* System.IO.StreamWriter sw = new System.IO.StreamWriter(
                 @"C:\Users\kentaro\Desktop\SDKを使ったプログラム\Eki_maker\Eki_maker\bin\Debug\routedata.json", false, System.Text.Encoding.GetEncoding("shift_jis"));
             frmResult fm = new frmResult();
             try
@@ -99,7 +107,7 @@ namespace Eki_maker
             {
                 sw.Close();
                 this.Close();
-            }
+            }*/
          
 
 
