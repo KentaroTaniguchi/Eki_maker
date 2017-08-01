@@ -18,34 +18,30 @@ namespace Eki_maker
 {
     public partial class frmResult : Form 
     {
-        private bool v;
-
         public frmResult()
         {
             InitializeComponent();
         }
 
-        public frmResult(int count)
-        {
-            
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="station1"></param>
+        /// <param name="station2"></param>
         public frmResult(string station1, string station2) : this()
         {
             ExpDiaNavi6 navi = (ExpDiaNavi6)axExpDiaShowCoursePanel131.ExpDiaNavi_A2;      
             navi.AddKey(station1);
             navi.AddKey(station2);
-            if (station1 == "")
-            {
-                this.Close();
-            }
-
             axExpDiaShowCoursePanel131.SearchCourse_A2();
             ExpDiaCourseSet10 couseSet = (ExpDiaCourseSet10)axExpDiaShowCoursePanel131.ExpDiaCourseSet10;
-
-            ExpDiaCourse10 course = couseSet.GetCourse10(1, 1);
-            
+            ExpDiaCourse10 course = couseSet.GetCourse10(1, 1);   
         }
 
+        /// <summary>
+        /// frmResult内で入力内容、探索結果を表示。
+        /// </summary>
+        /// <param name="mainform"></param>
         public frmResult(Form1 mainform) : this()
         {
             ExpDiaNavi6 navi = (ExpDiaNavi6)axExpDiaShowCoursePanel131.ExpDiaNavi_A2;
@@ -55,9 +51,7 @@ namespace Eki_maker
           //  ExpDiaCourseSet10 couseSet = (ExpDiaCourseSet10)axExpDiaShowCoursePanel131.ExpDiaCourseSet10;
           //  Console.WriteLine(couseSet.CourseCount);
           //  ExpDiaCourse10 course = couseSet.GetCourse10(1,1);
-          // ExpDiaCourse10 couseget = new ExpDiaCourse10();
-          
-           
+          //  ExpDiaCourse10 couseget = new ExpDiaCourse10();  
             
         }
 
@@ -71,27 +65,29 @@ namespace Eki_maker
         {
             throw new NotImplementedException();
         }
-
+        /// <summary>
+        /// ボタンがクリックされた時
+        /// 探索結果の情報をcousedateの中に入れる。
+        /// cousedateをjson形式にコンバートし
+        /// jsonファイルを作成する。
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void botton1_Click(object sender, EventArgs e)
         {
              ExpDiaCourseSet10 couseSet = (ExpDiaCourseSet10)axExpDiaShowCoursePanel131.ExpDiaCourseSet10;
              ExpDiaCourse10 course = couseSet.GetCourse10(1, 1);
              IExpDiaCourse_A2 couseget = (IExpDiaCourse_A2)axExpDiaShowCoursePanel131.ExpDiaCourse_A2;
              
-            //JSONに入れたい探索結果情報
+            //jsonに入れたい探索結果情報
             cousedate route = new cousedate();
             route.Name = couseget.CourseString2;
             route.TotalTime = couseget.TotalTime;
             
-
             var json = JsonConvert.SerializeObject(route, Formatting.Indented);
             var deserialized = JsonConvert.DeserializeObject<cousedate>(json);
-            System.Windows.Forms.MessageBox.Show($"経路名（路線名）: {deserialized.Name}");
-            System.Windows.Forms.MessageBox.Show($"所要時間: {deserialized.TotalTime}分");
-
 
             SaveFileDialog sfd = new SaveFileDialog();
-
             //はじめのファイル名を指定する
             //はじめに「ファイル名」で表示される文字列を指定する
             sfd.FileName = "新しいファイル.json";
@@ -99,7 +95,7 @@ namespace Eki_maker
             sfd.InitialDirectory = @"C:\";
             //[ファイルの種類]に表示される選択肢を指定する
             //指定しない（空の文字列）の時は、現在のディレクトリが表示される
-            sfd.Filter = "jsonファイル(*.json;*.json)|*.json;*.json";
+            sfd.Filter = "jsonファイル|*.json;";
             //[ファイルの種類]ではじめに選択されるものを指定する
             //2番目の「すべてのファイル」が選択されているようにする
             sfd.FilterIndex = 2;
@@ -130,13 +126,9 @@ namespace Eki_maker
                     sw.Close();
                     this.Close();
                 }
-
             }
 
-
-
 /*
-
             if (sfd.ShowDialog() == DialogResult.OK) {
                 System.IO.Stream stream   ;
                 stream = sfd.OpenFile();
@@ -163,11 +155,6 @@ namespace Eki_maker
                 sw.Close();
                 this.Close();
             }*/
-         
-
-
-            
-
         }
     }
 }

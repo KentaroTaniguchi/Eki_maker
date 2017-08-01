@@ -26,54 +26,91 @@ namespace Eki_maker
     public partial class Form1 : Form
     {
 
-
-    
         public Form1()
         {
             InitializeComponent();
         }
 
-        
-
         private void axExpStationNameEdit1_StationTypeChanged(object sender, AxEXPJPCTLLib._IExpStationNameEditEvents_StationTypeChangedEvent e)
         {
           
         }
-
+        /// <summary>
+        /// 探索ボタンが押された時に
+        /// 入力値が適しているなら探索結果画面に移動し探索結果を表示
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void button1_Click(object sender, EventArgs e)
         {
-
-            
-            ExpDataExtraction2 stations = new ExpDataExtraction2();
-            if(stations.IsValidStation(20170731, axExpDiaStationNameEdit21.StationName) && stations.IsValidStation(20170731, axExpDiaStationNameEdit22.StationName))
+            //ExpDiaStationNameEdit21の入力状態の値をもとに条件文を作成。
+            //１＝未入力状態
+            //２＝駅名は未確定状態
+            //３＝駅名は確定状態
+            if (axExpDiaStationNameEdit21.InputState == 3 && axExpDiaStationNameEdit22.InputState == 3)
             {
                 ExpDiaDB10 idb = new ExpDiaDB10();
                 ExpDiaNavi6 navi = idb.CreateNavi6();
-                navi.AddKey(axExpDiaStationNameEdit21.StationName);
-                navi.AddKey(axExpDiaStationNameEdit22.StationName);
-                frmResult f = new frmResult(axExpDiaStationNameEdit21.StationName, axExpDiaStationNameEdit22.StationName );
-                f.ShowDialog(this);
-            }
-            else
-            {
-                MessageBox.Show("駅名が正しく入力されていません。");
-            }
-
-          /*  try
-            {
-                ExpDiaDB10 idb = new ExpDiaDB10();
-                ExpDiaNavi6 navi = idb.CreateNavi6();
-                navi.AddKey(axExpDiaStationNameEdit21.StationName);
-                navi.AddKey(axExpDiaStationNameEdit22.StationName);
                 frmResult f = new frmResult(axExpDiaStationNameEdit21.StationName, axExpDiaStationNameEdit22.StationName);
                 f.ShowDialog(this);
             }
-            finally
+            else if (axExpDiaStationNameEdit21.InputState == 3)
             {
+                MessageBox.Show("到着駅に正しい駅名を入力してください。\n黒文字が適正駅名です。");
+            }
+            else if (axExpDiaStationNameEdit22.InputState == 3)
+            {
+                MessageBox.Show("出発駅に正しい駅名を入力してください。\n黒文字が適正駅名です。");
+            }
+            else
+            {
+                MessageBox.Show("出発駅、到着駅に駅名を入力してください。\n" +
+                                "例（出発駅：高円寺、到着駅：中野（東京））");
+            }
+            /*
+            //駅すぱあと情報リストオブジェクト。
+            ExpDataExtraction2 stations = new ExpDataExtraction2();
+            //駅すぱあとの情報とaxExpDiaStationNameEdit21（axExpDiaStationNameEdit22)で入力された駅名が同じだった場合に探索結果を表示。
+            if(stations.IsValidStation(0, axExpDiaStationNameEdit21.StationName) && stations.IsValidStation(0, axExpDiaStationNameEdit22.StationName))
+            {
+                ExpDiaDB10 idb = new ExpDiaDB10();
+                ExpDiaNavi6 navi = idb.CreateNavi6();
+                navi.AddKey(axExpDiaStationNameEdit21.StationName);//botton１_click内で処理する場合
+                navi.AddKey(axExpDiaStationNameEdit22.StationName);//botton１_click内で処理する場合
+                frmResult f = new frmResult(axExpDiaStationNameEdit21.StationName, axExpDiaStationNameEdit22.StationName );
+                f.ShowDialog(this);
+            }
+            else if (stations.IsValidStation(0, axExpDiaStationNameEdit21.StationName))
+            {
+                MessageBox.Show("到着駅に正しい駅名を入力してください。\n黒文字が適正駅名です。");
 
+            }
+            else if (stations.IsValidStation(0, axExpDiaStationNameEdit22.StationName))
+            {
+                MessageBox.Show("出発駅に正しい駅名を入力してください。\n黒文字が適正駅名です。");
+            }
+            else
+            {
+                MessageBox.Show("出発駅、到着駅に駅名を入力してください。\n" +
+                                "例（出発駅：高円寺、到着駅：中野（東京））");
             }*/
-           
-           
+
+            /*  try
+              {
+                  ExpDiaDB10 idb = new ExpDiaDB10();
+                  ExpDiaNavi6 navi = idb.CreateNavi6();
+                  navi.AddKey(axExpDiaStationNameEdit21.StationName);
+                  navi.AddKey(axExpDiaStationNameEdit22.StationName);
+                  frmResult f = new frmResult(axExpDiaStationNameEdit21.StationName, axExpDiaStationNameEdit22.StationName);
+                  f.ShowDialog(this);
+              }
+              finally
+              {
+
+              }*/
+
+
 
 
 
@@ -108,7 +145,12 @@ namespace Eki_maker
         {
             this.Close();
         }
-
+        /// <summary>
+        /// ファイル読み込みを行う。
+        /// jsonファイルではない、cousedata内の値が空だった場合に例外処理が発生する。
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button3_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
@@ -127,18 +169,30 @@ namespace Eki_maker
                
                 //OKボタンがクリックされたとき、選択されたファイル名を表示する
                 StreamReader sr = new StreamReader(ofd.FileName, Encoding.GetEncoding("shift_jis"));
-                StreamReader sr2 = new StreamReader(ofd.FileName, Encoding.GetEncoding("shift_jis"));
-                if (Regex.IsMatch(sr.ReadToEnd(), "\"name\":"))
+                try
                 {
                     deserialized = JsonConvert.DeserializeObject<cousedate>(sr.ReadToEnd());
+                   
+                }
+                catch (Newtonsoft.Json.JsonReaderException ex)
+                {
+                    MessageBox.Show("jsonの形式が正しくありません。\n jsonの中身を確認してください。" + ex.Message);
+                }
+                finally
+                {
+                    sr.Close();
+                    sr.Dispose();
+                }
+               if(deserialized.Name == "")
+                {
+                    MessageBox.Show("必要な値が存在しません。\n jsonの中身を確認してください。");
                 }
                 else
                 {
-                    MessageBox.Show("そのファイルは適していません");
+                    label4.Text = $"経路名（路線名）: {deserialized.Name}";
+                    label5.Text = $"合計時間: {deserialized.TotalTime}";
                 }
-
-                label4.Text = $"経路名（路線名）: {deserialized.Name}";
-                label5.Text = $"合計時間: {deserialized.TotalTime}";
+                
 
             }
            
