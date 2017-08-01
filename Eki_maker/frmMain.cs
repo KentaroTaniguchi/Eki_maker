@@ -14,6 +14,11 @@ using EXPDENGNLib;
 using AxEXPDCTRL2Lib;
 using System.IO;
 using System.Runtime.Serialization.Json;
+using System.Net;
+using System.IO.Compression;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using System.Text.RegularExpressions;
 
 namespace Eki_maker
 {
@@ -37,19 +42,38 @@ namespace Eki_maker
 
         public void button1_Click(object sender, EventArgs e)
         {
-          
 
-            ExpDiaDB10 idb = new ExpDiaDB10();
-            ExpDiaNavi6 navi = idb.CreateNavi6();
-          
-            navi.AddKey(axExpDiaStationNameEdit21.StationName);
-            navi.AddKey(axExpDiaStationNameEdit22.StationName);
-
-            frmResult f = new frmResult(this);
-            f.ShowDialog(this);
             
-            navi.RemoveAllKey();// 登録してある探索用駅情報（出発駅、到着駅、経由駅）を全て削除します
+            ExpDataExtraction2 stations = new ExpDataExtraction2();
+            if(stations.IsValidStation(20170731, axExpDiaStationNameEdit21.StationName) && stations.IsValidStation(20170731, axExpDiaStationNameEdit22.StationName))
+            {
+                ExpDiaDB10 idb = new ExpDiaDB10();
+                ExpDiaNavi6 navi = idb.CreateNavi6();
+                navi.AddKey(axExpDiaStationNameEdit21.StationName);
+                navi.AddKey(axExpDiaStationNameEdit22.StationName);
+                frmResult f = new frmResult(axExpDiaStationNameEdit21.StationName, axExpDiaStationNameEdit22.StationName );
+                f.ShowDialog(this);
+            }
+            else
+            {
+                MessageBox.Show("駅名が正しく入力されていません。");
+            }
 
+          /*  try
+            {
+                ExpDiaDB10 idb = new ExpDiaDB10();
+                ExpDiaNavi6 navi = idb.CreateNavi6();
+                navi.AddKey(axExpDiaStationNameEdit21.StationName);
+                navi.AddKey(axExpDiaStationNameEdit22.StationName);
+                frmResult f = new frmResult(axExpDiaStationNameEdit21.StationName, axExpDiaStationNameEdit22.StationName);
+                f.ShowDialog(this);
+            }
+            finally
+            {
+
+            }*/
+           
+           
 
 
 
@@ -87,15 +111,49 @@ namespace Eki_maker
 
         private void button3_Click(object sender, EventArgs e)
         {
-            string addr = "";
-            StreamReader sr = new StreamReader(@"C:\Users\kentaro\Desktop\SDKを使ったプログラム\Eki_maker\Eki_maker\bin\Debug\routedata.json", Encoding.GetEncoding("shift_JIS"));
-            string text = sr.ReadToEnd();
-            sr.Close();
-            addr += text;
-            System.Windows.Forms.MessageBox.Show(addr);
-            Form1 f = new Form1();
-            f.richTextBox1_TextChanged(text,e);
-            
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.FileName = "新しいファイル.json";
+            ofd.InitialDirectory= @"C:\";
+            ofd.Filter = "JSONファイル(*.json)|*.json";
+            ofd.FilterIndex = 2;
+            ofd.Title = "開くファイルを選択してください";
+            ofd.RestoreDirectory = true;
+            ofd.CheckFileExists = true;
+            ofd.CheckPathExists = true;
+            cousedate deserialized = new cousedate();
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+               
+                //OKボタンがクリックされたとき、選択されたファイル名を表示する
+                StreamReader sr = new StreamReader(ofd.FileName, Encoding.GetEncoding("shift_jis"));
+                StreamReader sr2 = new StreamReader(ofd.FileName, Encoding.GetEncoding("shift_jis"));
+                if (Regex.IsMatch(sr.ReadToEnd(), "\"name\":"))
+                {
+                    deserialized = JsonConvert.DeserializeObject<cousedate>(sr.ReadToEnd());
+                }
+                else
+                {
+                    MessageBox.Show("そのファイルは適していません");
+                }
+
+                label4.Text = $"経路名（路線名）: {deserialized.Name}";
+                label5.Text = $"合計時間: {deserialized.TotalTime}";
+
+            }
+           
+
+
+
+            //System.Windows.Forms.MessageBox.Show();
+            /* string addr = "";
+             cousedate read_route = new cousedate();
+
+             System.Windows.Forms.MessageBox.Show(read_route.Name); 
+            // StreamReader sr = new StreamReader(@"C:\Users\kentaro\Desktop\SDKを使ったプログラム\Eki_maker\Eki_maker\bin\Debug\routedata.json", Encoding.GetEncoding("shift_JIS"));
+             string text = sr.ReadToEnd();
+             sr.Close();
+             addr += text;*/
         }
 
         private void richTextBox1_TextChanged(object sender, EventArgs e)
@@ -104,5 +162,6 @@ namespace Eki_maker
            
 
         }
+
     }
 }

@@ -42,10 +42,10 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.axExpDiaStationNameEdit21)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axExpDiaStationNameEdit22)).BeginInit();
-            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -103,7 +103,13 @@
             this.axExpDiaStationNameEdit22.Size = new System.Drawing.Size(192, 25);
             this.axExpDiaStationNameEdit22.TabIndex = 17;
             this.axExpDiaStationNameEdit22.StationTypeChanged += new AxEXPDCTRL2Lib._IExpDiaStationNameEdit2Events_StationTypeChangedEventHandler(this.axExpDiaStationNameEdit22_StationTypeChanged);
-           
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(584, 24);
+            this.menuStrip1.TabIndex = 24;
             // 
             // fileToolStripMenuItem
             // 
@@ -143,7 +149,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(237, 318);
+            this.button3.Location = new System.Drawing.Point(237, 341);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(305, 79);
             this.button3.TabIndex = 21;
@@ -151,21 +157,30 @@
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
-            // richTextBox1
+            // label4
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(12, 233);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(533, 79);
-            this.richTextBox1.TabIndex = 23;
-            this.richTextBox1.Text = "";
-            this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
+            this.label4.Location = new System.Drawing.Point(16, 254);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(500, 28);
+            this.label4.TabIndex = 25;
+            this.label4.Text = "空欄（経路）";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(16, 282);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(89, 12);
+            this.label5.TabIndex = 26;
+            this.label5.Text = "空欄（合計時間）";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(584, 432);
-            this.Controls.Add(this.richTextBox1);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.axExpDiaStationNameEdit22);
@@ -182,8 +197,6 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.axExpDiaStationNameEdit21)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axExpDiaStationNameEdit22)).EndInit();
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -203,7 +216,8 @@
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
     }
 }
 
