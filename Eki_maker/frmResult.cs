@@ -35,16 +35,6 @@ namespace Eki_maker
             navi.AddKey(station2);
             axExpDiaShowCoursePanel131.SearchCourse_A2();   
         }
-
-        private void frmResult_Load(object sender, EventArgs e)
-        {
-        }
-
-        public static implicit operator frmResult(AxExpStationNameEdit v)
-        {
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// ボタンがクリックされた時
         /// 探索結果の情報をCouseDateの中に入れる。
@@ -53,17 +43,16 @@ namespace Eki_maker
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void botton1_Click(object sender, EventArgs e)
-        {      
-             
+        private void Save(object sender, EventArgs e)
+        {
             ExpDiaCourseSet10 couseSet = (ExpDiaCourseSet10)axExpDiaShowCoursePanel131.ExpDiaCourseSet10;
-            ExpDiaCourse10 course = couseSet.GetCourse10(axExpDiaShowCoursePanel131.CurrentSortType,  axExpDiaShowCoursePanel131.CurrentCourseNo);
-    
+            ExpDiaCourse10 course = couseSet.GetCourse10(axExpDiaShowCoursePanel131.CurrentSortType, axExpDiaShowCoursePanel131.CurrentCourseNo);
+
             //jsonに入れたい探索結果情報
             CouseDate cousedate = new CouseDate();
             cousedate.Route = course.DDEStyleString;
             cousedate.TotalTime = course.TotalTime;
-            
+
             var json = JsonConvert.SerializeObject(cousedate, Formatting.Indented);
             var deserialized = JsonConvert.DeserializeObject<CouseDate>(json);
 
@@ -89,7 +78,7 @@ namespace Eki_maker
             //存在しないパスが指定されたとき警告を表示する
             //デフォルトでTrueなので指定する必要はない
             sfd.CheckPathExists = true;
-            
+
             //ダイアログを表示する
             if (sfd.ShowDialog() == DialogResult.OK)
             {
@@ -106,7 +95,11 @@ namespace Eki_maker
                     sw.Close();
                     this.Close();
                 }
-            }         
+            }
         }
     }
 }
+
+
+
+

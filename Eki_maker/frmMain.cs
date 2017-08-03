@@ -31,17 +31,13 @@ namespace Eki_maker
             InitializeComponent();
         }
 
-        private void axExpStationNameEdit1_StationTypeChanged(object sender, AxEXPJPCTLLib._IExpStationNameEditEvents_StationTypeChangedEvent e)
-        {
-          
-        }
         /// <summary>
         /// 探索ボタンが押された時に
         /// 入力値が適しているなら探索結果画面に移動し探索結果を表示
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void button1_Click(object sender, EventArgs e)
+        private void search_route(object sender, EventArgs e)
         {
             //ExpDiaStationNameEdit21の入力状態の値をもとに条件文を作成。
             //１＝未入力状態
@@ -68,36 +64,23 @@ namespace Eki_maker
                                 "例（出発駅：高円寺、到着駅：中野（東京））");
             }
         }
-   
-        private void Form1_Load(object sender, EventArgs e)
-        {
-        }
 
-        private void axExpDiaStationNameEdit22_StationTypeChanged(object sender, AxEXPDCTRL2Lib._IExpDiaStationNameEdit2Events_StationTypeChangedEvent e)
-        {
-
-        }
-
-        private void axExpDiaStationNameEdit21_StationTypeChanged(object sender, AxEXPDCTRL2Lib._IExpDiaStationNameEdit2Events_StationTypeChangedEvent e)
-        {
-
-        }
-
-        private void button2_Click(object sender, EventArgs e)
+        private void Close(object sender, EventArgs e)
         {
             this.Close();
         }
+
         /// <summary>
-        /// ファイル読み込みを行う。
+        ///  ファイル読み込みを行う。
         /// jsonファイルではない、cousedata内の値が空だった場合に例外処理が発生する。
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button3_Click(object sender, EventArgs e)
+        private void Read(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.FileName = "新しいファイル.json";
-            ofd.InitialDirectory= @"C:\Users\kentaro\デスクトップ";
+            ofd.InitialDirectory = @"C:\Users\kentaro\デスクトップ";
             ofd.Filter = "JSONファイル(*.json)|*.json";
             ofd.FilterIndex = 2;
             ofd.Title = "開くファイルを選択してください";
@@ -108,13 +91,13 @@ namespace Eki_maker
 
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-               
+
                 //OKボタンがクリックされたとき、選択されたファイル名を表示する
                 StreamReader sr = new StreamReader(ofd.FileName, Encoding.GetEncoding("shift_jis"));
                 try
                 {
                     cousedate = JsonConvert.DeserializeObject<CouseDate>(sr.ReadToEnd());
-                   
+
                 }
                 catch (Newtonsoft.Json.JsonReaderException ex)
                 {
@@ -126,14 +109,9 @@ namespace Eki_maker
                     sr.Dispose();
                 }
                 //deserialized.Nameの中身が何もなかった場合に
-               if(cousedate.Route == null)
+                if (cousedate.Route == null)
                 {
                     MessageBox.Show("探索結果の経路情報が空となっています。\n" + ofd.FileName + "の中身に経路情報が存在するか確認してください。");
-                    
-                }
-               else if (cousedate.Route == "")
-                {
-                    MessageBox.Show("探索結果の経路情報が空となっています。\n" + ofd.FileName +"の中身に経路情報が存在するか確認してください。");
 
                 }
                 else

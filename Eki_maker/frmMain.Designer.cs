@@ -44,7 +44,6 @@
             this.button3 = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.axExpDiaStationNameEdit21)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axExpDiaStationNameEdit22)).BeginInit();
@@ -84,7 +83,7 @@
             this.button1.TabIndex = 15;
             this.button1.Text = "経路の探索";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.search_route);
             // 
             // axExpDiaStationNameEdit21
             // 
@@ -94,7 +93,6 @@
             this.axExpDiaStationNameEdit21.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axExpDiaStationNameEdit21.OcxState")));
             this.axExpDiaStationNameEdit21.Size = new System.Drawing.Size(192, 25);
             this.axExpDiaStationNameEdit21.TabIndex = 16;
-            this.axExpDiaStationNameEdit21.StationTypeChanged += new AxEXPDCTRL2Lib._IExpDiaStationNameEdit2Events_StationTypeChangedEventHandler(this.axExpDiaStationNameEdit21_StationTypeChanged);
             // 
             // axExpDiaStationNameEdit22
             // 
@@ -104,7 +102,6 @@
             this.axExpDiaStationNameEdit22.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axExpDiaStationNameEdit22.OcxState")));
             this.axExpDiaStationNameEdit22.Size = new System.Drawing.Size(192, 25);
             this.axExpDiaStationNameEdit22.TabIndex = 17;
-            this.axExpDiaStationNameEdit22.StationTypeChanged += new AxEXPDCTRL2Lib._IExpDiaStationNameEdit2Events_StationTypeChangedEventHandler(this.axExpDiaStationNameEdit22_StationTypeChanged);
             // 
             // menuStrip1
             // 
@@ -147,7 +144,7 @@
             this.button2.TabIndex = 20;
             this.button2.Text = "終了";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Click += new System.EventHandler(this.Close);
             // 
             // button3
             // 
@@ -155,9 +152,9 @@
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(305, 79);
             this.button3.TabIndex = 21;
-            this.button3.Text = "保存内容";
+            this.button3.Text = "読込";
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.button3.Click += new System.EventHandler(this.Read);
             // 
             // label4
             // 
@@ -176,15 +173,6 @@
             this.label5.TabIndex = 26;
             this.label5.Text = "空欄（合計時間）";
             // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(0, 0);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(35, 12);
-            this.label6.TabIndex = 27;
-            this.label6.Text = "label6";
-            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -200,7 +188,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(584, 432);
             this.Controls.Add(this.label7);
-            this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.button3);
@@ -216,7 +203,6 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.axExpDiaStationNameEdit21)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axExpDiaStationNameEdit22)).EndInit();
             this.ResumeLayout(false);
@@ -228,7 +214,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button button1;
         public AxEXPDCTRL2Lib.AxExpDiaStationNameEdit2 axExpDiaStationNameEdit21;
         public AxEXPDCTRL2Lib.AxExpDiaStationNameEdit2 axExpDiaStationNameEdit22;
         private System.Windows.Forms.MenuStrip menuStrip1;
@@ -240,8 +225,8 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button button1;
     }
 }
 
