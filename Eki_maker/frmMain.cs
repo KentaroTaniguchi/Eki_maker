@@ -38,7 +38,6 @@ namespace Eki_maker
         /// <summary>
         /// 探索ボタンが押された時に
         /// 入力値が適しているなら探索結果画面に移動し探索結果を表示
-        /// 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -52,8 +51,8 @@ namespace Eki_maker
             {
                 ExpDiaDB10 idb = new ExpDiaDB10();
                 ExpDiaNavi6 navi = idb.CreateNavi6();
-                frmResult f = new frmResult(axExpDiaStationNameEdit21.StationName, axExpDiaStationNameEdit22.StationName);
-                f.ShowDialog(this);
+                frmResult station_name_fr = new frmResult(axExpDiaStationNameEdit21.StationName, axExpDiaStationNameEdit22.StationName);
+                station_name_fr.ShowDialog(this);
             }
             else if (axExpDiaStationNameEdit21.InputState == 3)
             {
@@ -68,67 +67,10 @@ namespace Eki_maker
                 MessageBox.Show("出発駅、到着駅に駅名を入力してください。\n" +
                                 "例（出発駅：高円寺、到着駅：中野（東京））");
             }
-            /*
-            //駅すぱあと情報リストオブジェクト。
-            ExpDataExtraction2 stations = new ExpDataExtraction2();
-            //駅すぱあとの情報とaxExpDiaStationNameEdit21（axExpDiaStationNameEdit22)で入力された駅名が同じだった場合に探索結果を表示。
-            if(stations.IsValidStation(0, axExpDiaStationNameEdit21.StationName) && stations.IsValidStation(0, axExpDiaStationNameEdit22.StationName))
-            {
-                ExpDiaDB10 idb = new ExpDiaDB10();
-                ExpDiaNavi6 navi = idb.CreateNavi6();
-                navi.AddKey(axExpDiaStationNameEdit21.StationName);//botton１_click内で処理する場合
-                navi.AddKey(axExpDiaStationNameEdit22.StationName);//botton１_click内で処理する場合
-                frmResult f = new frmResult(axExpDiaStationNameEdit21.StationName, axExpDiaStationNameEdit22.StationName );
-                f.ShowDialog(this);
-            }
-            else if (stations.IsValidStation(0, axExpDiaStationNameEdit21.StationName))
-            {
-                MessageBox.Show("到着駅に正しい駅名を入力してください。\n黒文字が適正駅名です。");
-
-            }
-            else if (stations.IsValidStation(0, axExpDiaStationNameEdit22.StationName))
-            {
-                MessageBox.Show("出発駅に正しい駅名を入力してください。\n黒文字が適正駅名です。");
-            }
-            else
-            {
-                MessageBox.Show("出発駅、到着駅に駅名を入力してください。\n" +
-                                "例（出発駅：高円寺、到着駅：中野（東京））");
-            }*/
-
-            /*  try
-              {
-                  ExpDiaDB10 idb = new ExpDiaDB10();
-                  ExpDiaNavi6 navi = idb.CreateNavi6();
-                  navi.AddKey(axExpDiaStationNameEdit21.StationName);
-                  navi.AddKey(axExpDiaStationNameEdit22.StationName);
-                  frmResult f = new frmResult(axExpDiaStationNameEdit21.StationName, axExpDiaStationNameEdit22.StationName);
-                  f.ShowDialog(this);
-              }
-              finally
-              {
-
-              }*/
-
-
-
-
-
-
         }
-
-        private void axExpStationNameEdit2_StationTypeChanged(object sender, _IExpStationNameEditEvents_StationTypeChangedEvent e)
-        {
-
-        }
-
+   
         private void Form1_Load(object sender, EventArgs e)
         {
-        }
-        private void rbtAverage_CheckedChanged(object sender, EventArgs e)
-        {
-            Height = 290;
-            
         }
 
         private void axExpDiaStationNameEdit22_StationTypeChanged(object sender, AxEXPDCTRL2Lib._IExpDiaStationNameEdit2Events_StationTypeChangedEvent e)
@@ -155,14 +97,14 @@ namespace Eki_maker
         {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.FileName = "新しいファイル.json";
-            ofd.InitialDirectory= @"C:\";
+            ofd.InitialDirectory= @"C:\Users\kentaro\デスクトップ";
             ofd.Filter = "JSONファイル(*.json)|*.json";
             ofd.FilterIndex = 2;
             ofd.Title = "開くファイルを選択してください";
             ofd.RestoreDirectory = true;
             ofd.CheckFileExists = true;
             ofd.CheckPathExists = true;
-            cousedate deserialized = new cousedate();
+            CouseDate cousedate = new CouseDate();
 
             if (ofd.ShowDialog() == DialogResult.OK)
             {
@@ -171,7 +113,7 @@ namespace Eki_maker
                 StreamReader sr = new StreamReader(ofd.FileName, Encoding.GetEncoding("shift_jis"));
                 try
                 {
-                    deserialized = JsonConvert.DeserializeObject<cousedate>(sr.ReadToEnd());
+                    cousedate = JsonConvert.DeserializeObject<CouseDate>(sr.ReadToEnd());
                    
                 }
                 catch (Newtonsoft.Json.JsonReaderException ex)
@@ -183,39 +125,23 @@ namespace Eki_maker
                     sr.Close();
                     sr.Dispose();
                 }
-               if(deserialized.Name == "")
+                //deserialized.Nameの中身が何もなかった場合に
+               if(cousedate.Route == null)
                 {
-                    MessageBox.Show("必要な値が存在しません。\n jsonの中身を確認してください。");
+                    MessageBox.Show("探索結果の経路情報が空となっています。\n" + ofd.FileName + "の中身に経路情報が存在するか確認してください。");
+                    
+                }
+               else if (cousedate.Route == "")
+                {
+                    MessageBox.Show("探索結果の経路情報が空となっています。\n" + ofd.FileName +"の中身に経路情報が存在するか確認してください。");
+
                 }
                 else
                 {
-                    label4.Text = $"経路名（路線名）: {deserialized.Name}";
-                    label5.Text = $"合計時間: {deserialized.TotalTime}";
+                    label4.Text = $"経路名（路線名）: {cousedate.Route}";
+                    label5.Text = $"合計時間: {cousedate.TotalTime}";
                 }
-                
-
             }
-           
-
-
-
-            //System.Windows.Forms.MessageBox.Show();
-            /* string addr = "";
-             cousedate read_route = new cousedate();
-
-             System.Windows.Forms.MessageBox.Show(read_route.Name); 
-            // StreamReader sr = new StreamReader(@"C:\Users\kentaro\Desktop\SDKを使ったプログラム\Eki_maker\Eki_maker\bin\Debug\routedata.json", Encoding.GetEncoding("shift_JIS"));
-             string text = sr.ReadToEnd();
-             sr.Close();
-             addr += text;*/
         }
-
-        private void richTextBox1_TextChanged(object sender, EventArgs e)
-        {
-           StreamReader sr = new StreamReader(@"C:\Users\kentaro\Desktop\SDKを使ったプログラム\Eki_maker\Eki_maker\bin\Debug\routedata.json", Encoding.GetEncoding("shift_JIS"));
-           
-
-        }
-
     }
 }

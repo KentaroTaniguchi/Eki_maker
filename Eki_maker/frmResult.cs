@@ -24,7 +24,7 @@ namespace Eki_maker
         }
 
         /// <summary>
-        /// 
+        /// 探索結果の表示
         /// </summary>
         /// <param name="station1"></param>
         /// <param name="station2"></param>
@@ -33,66 +33,46 @@ namespace Eki_maker
             ExpDiaNavi6 navi = (ExpDiaNavi6)axExpDiaShowCoursePanel131.ExpDiaNavi_A2;      
             navi.AddKey(station1);
             navi.AddKey(station2);
-            axExpDiaShowCoursePanel131.SearchCourse_A2();
-            ExpDiaCourseSet10 couseSet = (ExpDiaCourseSet10)axExpDiaShowCoursePanel131.ExpDiaCourseSet10;
-            ExpDiaCourse10 course = couseSet.GetCourse10(1, 1);   
-        }
-
-        /// <summary>
-        /// frmResult内で入力内容、探索結果を表示。
-        /// </summary>
-        /// <param name="mainform"></param>
-        public frmResult(Form1 mainform) : this()
-        {
-            ExpDiaNavi6 navi = (ExpDiaNavi6)axExpDiaShowCoursePanel131.ExpDiaNavi_A2;
-            navi.AddKey(mainform.axExpDiaStationNameEdit21.StationName);
-            navi.AddKey(mainform.axExpDiaStationNameEdit22.StationName);
-            axExpDiaShowCoursePanel131.SearchCourse_A2();
-          //  ExpDiaCourseSet10 couseSet = (ExpDiaCourseSet10)axExpDiaShowCoursePanel131.ExpDiaCourseSet10;
-          //  Console.WriteLine(couseSet.CourseCount);
-          //  ExpDiaCourse10 course = couseSet.GetCourse10(1,1);
-          //  ExpDiaCourse10 couseget = new ExpDiaCourse10();  
-            
+            axExpDiaShowCoursePanel131.SearchCourse_A2();   
         }
 
         private void frmResult_Load(object sender, EventArgs e)
         {
-
-            
         }
 
         public static implicit operator frmResult(AxExpStationNameEdit v)
         {
             throw new NotImplementedException();
         }
+
         /// <summary>
         /// ボタンがクリックされた時
-        /// 探索結果の情報をcousedateの中に入れる。
-        /// cousedateをjson形式にコンバートし
+        /// 探索結果の情報をCouseDateの中に入れる。
+        /// 中身をjson形式にコンバートし
         /// jsonファイルを作成する。
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         public void botton1_Click(object sender, EventArgs e)
-        {
-             ExpDiaCourseSet10 couseSet = (ExpDiaCourseSet10)axExpDiaShowCoursePanel131.ExpDiaCourseSet10;
-             ExpDiaCourse10 course = couseSet.GetCourse10(1, 1);
-             IExpDiaCourse_A2 couseget = (IExpDiaCourse_A2)axExpDiaShowCoursePanel131.ExpDiaCourse_A2;
+        {      
              
+            ExpDiaCourseSet10 couseSet = (ExpDiaCourseSet10)axExpDiaShowCoursePanel131.ExpDiaCourseSet10;
+            ExpDiaCourse10 course = couseSet.GetCourse10(axExpDiaShowCoursePanel131.CurrentSortType,  axExpDiaShowCoursePanel131.CurrentCourseNo);
+    
             //jsonに入れたい探索結果情報
-            cousedate route = new cousedate();
-            route.Name = couseget.CourseString2;
-            route.TotalTime = couseget.TotalTime;
+            CouseDate cousedate = new CouseDate();
+            cousedate.Route = course.DDEStyleString;
+            cousedate.TotalTime = course.TotalTime;
             
-            var json = JsonConvert.SerializeObject(route, Formatting.Indented);
-            var deserialized = JsonConvert.DeserializeObject<cousedate>(json);
+            var json = JsonConvert.SerializeObject(cousedate, Formatting.Indented);
+            var deserialized = JsonConvert.DeserializeObject<CouseDate>(json);
 
             SaveFileDialog sfd = new SaveFileDialog();
             //はじめのファイル名を指定する
             //はじめに「ファイル名」で表示される文字列を指定する
             sfd.FileName = "新しいファイル.json";
             //はじめに表示されるフォルダを指定する
-            sfd.InitialDirectory = @"C:\";
+            sfd.InitialDirectory = @"C:\Users\kentaro\デスクトップ";
             //[ファイルの種類]に表示される選択肢を指定する
             //指定しない（空の文字列）の時は、現在のディレクトリが表示される
             sfd.Filter = "jsonファイル|*.json;";
@@ -126,35 +106,7 @@ namespace Eki_maker
                     sw.Close();
                     this.Close();
                 }
-            }
-
-/*
-            if (sfd.ShowDialog() == DialogResult.OK) {
-                System.IO.Stream stream   ;
-                stream = sfd.OpenFile();
-                if(stream != null)
-                {
-                    System.IO.StreamWriter sw = new System.IO.StreamWriter(stream);
-                    sw.Write(json);
-                    sw.Close();
-                    stream.Close();
-                    this.Close();
-                }
-            }*/
-            
-           
-          /* System.IO.StreamWriter sw = new System.IO.StreamWriter(
-                @"C:\Users\kentaro\Desktop\SDKを使ったプログラム\Eki_maker\Eki_maker\bin\Debug\routedata.json", false, System.Text.Encoding.GetEncoding("shift_jis"));
-            
-            try
-            {
-                sw.Write(json);
-            }
-            finally
-            {
-                sw.Close();
-                this.Close();
-            }*/
+            }         
         }
     }
 }
