@@ -1,12 +1,11 @@
 ﻿namespace Eki_maker
 {
-    partial class Form1
+    partial class frmMenu
     {
         /// <summary>
         /// 必要なデザイナー変数です。
         /// </summary>
         private System.ComponentModel.IContainer components = null;
-
         /// <summary>
         /// 使用中のリソースをすべてクリーンアップします。
         /// </summary>
@@ -28,11 +27,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMenu));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.search_result_botton = new System.Windows.Forms.Button();
             this.axExpDiaStationNameEdit21 = new AxEXPDCTRL2Lib.AxExpDiaStationNameEdit2();
             this.axExpDiaStationNameEdit22 = new AxEXPDCTRL2Lib.AxExpDiaStationNameEdit2();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -40,10 +39,10 @@
             this.mnuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuAttentionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
+            this.close_botton = new System.Windows.Forms.Button();
+            this.Read_file = new System.Windows.Forms.Button();
+            this.Route_Display = new System.Windows.Forms.Label();
+            this.Route＿Display = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.axExpDiaStationNameEdit21)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axExpDiaStationNameEdit22)).BeginInit();
@@ -75,15 +74,15 @@
             this.label3.TabIndex = 9;
             this.label3.Text = "到着";
             // 
-            // button1
+            // search_result_botton
             // 
-            this.button1.Location = new System.Drawing.Point(237, 24);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(308, 104);
-            this.button1.TabIndex = 15;
-            this.button1.Text = "経路の探索";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.search_route);
+            this.search_result_botton.Location = new System.Drawing.Point(237, 24);
+            this.search_result_botton.Name = "search_result_botton";
+            this.search_result_botton.Size = new System.Drawing.Size(308, 104);
+            this.search_result_botton.TabIndex = 15;
+            this.search_result_botton.Text = "経路の探索";
+            this.search_result_botton.UseVisualStyleBackColor = true;
+            this.search_result_botton.Click += new System.EventHandler(this.btn_Search_Route);
             // 
             // axExpDiaStationNameEdit21
             // 
@@ -136,42 +135,42 @@
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.helpToolStripMenuItem.Text = "ヘルプ";
             // 
-            // button2
+            // close_botton
             // 
-            this.button2.Location = new System.Drawing.Point(237, 134);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(308, 93);
-            this.button2.TabIndex = 20;
-            this.button2.Text = "終了";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.Close);
+            this.close_botton.Location = new System.Drawing.Point(237, 134);
+            this.close_botton.Name = "close_botton";
+            this.close_botton.Size = new System.Drawing.Size(308, 93);
+            this.close_botton.TabIndex = 20;
+            this.close_botton.Text = "終了";
+            this.close_botton.UseVisualStyleBackColor = true;
+            this.close_botton.Click += new System.EventHandler(this.btn_Close);
             // 
-            // button3
+            // Read_file
             // 
-            this.button3.Location = new System.Drawing.Point(237, 341);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(305, 79);
-            this.button3.TabIndex = 21;
-            this.button3.Text = "読込";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.Read);
+            this.Read_file.Location = new System.Drawing.Point(237, 341);
+            this.Read_file.Name = "Read_file";
+            this.Read_file.Size = new System.Drawing.Size(305, 79);
+            this.Read_file.TabIndex = 21;
+            this.Read_file.Text = "読込";
+            this.Read_file.UseVisualStyleBackColor = true;
+            this.Read_file.Click += new System.EventHandler(this.btn_Read_Json);
             // 
-            // label4
+            // Route_Display
             // 
-            this.label4.Location = new System.Drawing.Point(16, 254);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(500, 28);
-            this.label4.TabIndex = 25;
-            this.label4.Text = "空欄（経路）";
+            this.Route_Display.Location = new System.Drawing.Point(16, 254);
+            this.Route_Display.Name = "Route_Display";
+            this.Route_Display.Size = new System.Drawing.Size(500, 28);
+            this.Route_Display.TabIndex = 25;
+            this.Route_Display.Text = "空欄（経路）";
             // 
-            // label5
+            // Route＿Display
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(16, 282);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(89, 12);
-            this.label5.TabIndex = 26;
-            this.label5.Text = "空欄（合計時間）";
+            this.Route＿Display.AutoSize = true;
+            this.Route＿Display.Location = new System.Drawing.Point(16, 282);
+            this.Route＿Display.Name = "Route＿Display";
+            this.Route＿Display.Size = new System.Drawing.Size(89, 12);
+            this.Route＿Display.TabIndex = 26;
+            this.Route＿Display.Text = "空欄（合計時間）";
             // 
             // label7
             // 
@@ -182,27 +181,27 @@
             this.label7.TabIndex = 28;
             this.label7.Text = "到着駅";
             // 
-            // Form1
+            // frmMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(584, 432);
             this.Controls.Add(this.label7);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.Route＿Display);
+            this.Controls.Add(this.Route_Display);
+            this.Controls.Add(this.Read_file);
+            this.Controls.Add(this.close_botton);
             this.Controls.Add(this.axExpDiaStationNameEdit22);
             this.Controls.Add(this.axExpDiaStationNameEdit21);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.search_result_botton);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.menuStrip1);
             this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "frmMenu";
+            this.Text = "経路入出力画面";
             ((System.ComponentModel.ISupportInitialize)(this.axExpDiaStationNameEdit21)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axExpDiaStationNameEdit22)).EndInit();
             this.ResumeLayout(false);
@@ -221,12 +220,12 @@
         private System.Windows.Forms.ToolStripMenuItem mnuToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mnuAttentionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button close_botton;
+        private System.Windows.Forms.Button Read_file;
+        private System.Windows.Forms.Label Route_Display;
+        private System.Windows.Forms.Label Route＿Display;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button search_result_botton;
     }
 }
 

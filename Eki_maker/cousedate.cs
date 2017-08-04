@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace Eki_maker
 {
-    class CouseDate
+    class CourseDate
     {
         [Newtonsoft.Json.JsonProperty("searchresult")]
         public string Route{ get; set; }

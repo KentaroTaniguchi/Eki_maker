@@ -16,7 +16,7 @@ using Newtonsoft.Json;
 
 namespace Eki_maker
 {
-    public partial class frmResult : Form 
+    public partial class frmResult : Form
     {
         public frmResult()
         {
@@ -30,11 +30,26 @@ namespace Eki_maker
         /// <param name="station2"></param>
         public frmResult(string station1, string station2) : this()
         {
-            ExpDiaNavi6 navi = (ExpDiaNavi6)axExpDiaShowCoursePanel131.ExpDiaNavi_A2;      
+            ExpDiaNavi6 navi = (ExpDiaNavi6)axExpDiaShowCoursePanel131.ExpDiaNavi_A2;
+            ExpDiaDB10 db10 = new ExpDiaDB10();
             navi.AddKey(station1);
             navi.AddKey(station2);
-            axExpDiaShowCoursePanel131.SearchCourse_A2();   
+            axExpDiaShowCoursePanel131.SearchCourse_A2();
+            
+            /*  try
+        {
+            axExpDiaShowCoursePanel131.SearchCourse_A2();
         }
+        catch (System.Exception ex)
+        {
+            MessageBox.Show(ex.Message);
+
+        }*/
+
+
+        }
+      
+
         /// <summary>
         /// ボタンがクリックされた時
         /// 探索結果の情報をCouseDateの中に入れる。
@@ -43,19 +58,18 @@ namespace Eki_maker
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Save(object sender, EventArgs e)
+        private void btn_Write_Json(object sender, EventArgs e)
         {
-            ExpDiaCourseSet10 couseSet = (ExpDiaCourseSet10)axExpDiaShowCoursePanel131.ExpDiaCourseSet10;
-            ExpDiaCourse10 course = couseSet.GetCourse10(axExpDiaShowCoursePanel131.CurrentSortType, axExpDiaShowCoursePanel131.CurrentCourseNo);
-
+            ExpDiaCourseSet10 courseSet = (ExpDiaCourseSet10)axExpDiaShowCoursePanel131.ExpDiaCourseSet10;
+            ExpDiaCourse10 course = courseSet.GetCourse10(axExpDiaShowCoursePanel131.CurrentSortType, axExpDiaShowCoursePanel131.CurrentCourseNo);
             //jsonに入れたい探索結果情報
-            CouseDate cousedate = new CouseDate();
-            cousedate.Route = course.DDEStyleString;
-            cousedate.TotalTime = course.TotalTime;
+            CourseDate coursedate = new CourseDate();
+            coursedate.Route = course.DDEStyleString;
+            coursedate.TotalTime = course.TotalTime;
 
-            var json = JsonConvert.SerializeObject(cousedate, Formatting.Indented);
-            var deserialized = JsonConvert.DeserializeObject<CouseDate>(json);
-
+            var json = JsonConvert.SerializeObject(coursedate, Formatting.Indented);
+            var deserialized = JsonConvert.DeserializeObject<CourseDate>(json);
+            
             SaveFileDialog sfd = new SaveFileDialog();
             //はじめのファイル名を指定する
             //はじめに「ファイル名」で表示される文字列を指定する
@@ -85,16 +99,10 @@ namespace Eki_maker
                 //OKボタンがクリックされたとき、選択されたファイル名を表示する
                 Console.WriteLine(sfd.FileName);
                 System.IO.StreamWriter sw = new System.IO.StreamWriter(
-               sfd.FileName, false, System.Text.Encoding.GetEncoding("shift_jis"));
-                try
-                {
-                    sw.Write(json);
-                }
-                finally
-                {
-                    sw.Close();
-                    this.Close();
-                }
+                sfd.FileName, false, System.Text.Encoding.GetEncoding("shift_jis"));
+                sw.Write(json);
+                sw.Close();
+                this.Close();
             }
         }
     }

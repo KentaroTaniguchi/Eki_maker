@@ -22,22 +22,84 @@ using System.Text.RegularExpressions;
 
 namespace Eki_maker
 {
-
-    public partial class Form1 : Form
+    public partial class frmMenu : Form
     {
-
-        public Form1()
+        public frmMenu()
         {
             InitializeComponent();
         }
 
+        private void btn_Close(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
         /// <summary>
-        /// 探索ボタンが押された時に
-        /// 入力値が適しているなら探索結果画面に移動し探索結果を表示
+        /// jsonファイルを読込
+        ///jsonファイル内に記載されている値をcoursedateに入れる。
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void search_route(object sender, EventArgs e)
+        private void btn_Read_Json(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.FileName = "新しいファイル.json";
+            ofd.InitialDirectory = @"C:\Users\kentaro\デスクトップ";
+            ofd.Filter = "JSONファイル(*.json)|*.json";
+            ofd.FilterIndex = 2;
+            ofd.Title = "開くファイルを選択してください";
+            ofd.RestoreDirectory = true;
+            ofd.CheckFileExists = true;
+            ofd.CheckPathExists = true;
+            CourseDate coursedate = new CourseDate();
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                //OKボタンがクリックされたとき、選択されたファイル名を表示する
+                StreamReader sr = new StreamReader(ofd.FileName, Encoding.GetEncoding("shift_jis"));
+                //Jsonファイルに適した中身でない場合に例外処理が発生する。
+                try
+                {
+                    coursedate = JsonConvert.DeserializeObject<CourseDate>(sr.ReadToEnd());
+                }
+                catch (Newtonsoft.Json.JsonReaderException ex)
+                {
+                    MessageBox.Show("jsonの形式が正しくありません。\n jsonの中身を確認してください。" + ex.Message);
+                }
+                finally
+                {
+                    sr.Close();
+                    sr.Dispose();
+                }
+
+                //JSONファイルの中身が無記入の場合に処理（try_catchではじけなったときの処理）
+                if (coursedate == null)
+                {
+                    MessageBox.Show(ofd.FileName+"の中身が無記入となっています。\n 別のファイルを用意してください。");
+                }
+                else
+                {   
+                    //JSONファイルに経路情報等の値が入っていない場合に処理
+                    if (coursedate.Route == null)
+                    {
+                        MessageBox.Show("探索結果の経路情報が空となっています。\n" + ofd.FileName + "の中身に経路情報が存在するか確認してください。");
+                    }
+                    else
+                    {
+                        Route_Display.Text = $"経路名（路線名）: {coursedate.Route}";
+                        Route＿Display.Text = $"合計時間: {coursedate.TotalTime}";
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// ファイル読み込みを行う。
+        /// jsonファイルではない、cousedata内の値が空だった場合に例外処理が発生する。
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btn_Search_Route(object sender, EventArgs e)
         {
             //ExpDiaStationNameEdit21の入力状態の値をもとに条件文を作成。
             //１＝未入力状態
@@ -47,8 +109,23 @@ namespace Eki_maker
             {
                 ExpDiaDB10 idb = new ExpDiaDB10();
                 ExpDiaNavi6 navi = idb.CreateNavi6();
-                frmResult station_name_fr = new frmResult(axExpDiaStationNameEdit21.StationName, axExpDiaStationNameEdit22.StationName);
-                station_name_fr.ShowDialog(this);
+                navi.AddKey(axExpDiaStationNameEdit21.StationName);
+                navi.AddKey(axExpDiaStationNameEdit22.StationName);
+
+                //登録された駅名が探索に用いるときに正しいかどうかを判定する
+                //エラーコードの式は
+                //エラーコード ＝ エラー種別 × １００ ＋ エラー位置
+                //詳しいコードは【エラー種別】で調べる
+                //※エラーがない場合は0である。
+                if (idb.CheckNavi6((ExpDiaNavi6)navi) > 0)
+                {
+                    MessageBox.Show("探索結果が０件です。\n入力内容を変更してください。");                   
+                }
+                else
+                { 
+                    frmResult station_name_fr = new frmResult(axExpDiaStationNameEdit21.StationName,axExpDiaStationNameEdit22.StationName);
+                    station_name_fr.ShowDialog(this);
+                }
             }
             else if (axExpDiaStationNameEdit21.InputState == 3)
             {
@@ -62,63 +139,6 @@ namespace Eki_maker
             {
                 MessageBox.Show("出発駅、到着駅に駅名を入力してください。\n" +
                                 "例（出発駅：高円寺、到着駅：中野（東京））");
-            }
-        }
-
-        private void Close(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-        /// <summary>
-        ///  ファイル読み込みを行う。
-        /// jsonファイルではない、cousedata内の値が空だった場合に例外処理が発生する。
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Read(object sender, EventArgs e)
-        {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.FileName = "新しいファイル.json";
-            ofd.InitialDirectory = @"C:\Users\kentaro\デスクトップ";
-            ofd.Filter = "JSONファイル(*.json)|*.json";
-            ofd.FilterIndex = 2;
-            ofd.Title = "開くファイルを選択してください";
-            ofd.RestoreDirectory = true;
-            ofd.CheckFileExists = true;
-            ofd.CheckPathExists = true;
-            CouseDate cousedate = new CouseDate();
-
-            if (ofd.ShowDialog() == DialogResult.OK)
-            {
-
-                //OKボタンがクリックされたとき、選択されたファイル名を表示する
-                StreamReader sr = new StreamReader(ofd.FileName, Encoding.GetEncoding("shift_jis"));
-                try
-                {
-                    cousedate = JsonConvert.DeserializeObject<CouseDate>(sr.ReadToEnd());
-
-                }
-                catch (Newtonsoft.Json.JsonReaderException ex)
-                {
-                    MessageBox.Show("jsonの形式が正しくありません。\n jsonの中身を確認してください。" + ex.Message);
-                }
-                finally
-                {
-                    sr.Close();
-                    sr.Dispose();
-                }
-                //deserialized.Nameの中身が何もなかった場合に
-                if (cousedate.Route == null)
-                {
-                    MessageBox.Show("探索結果の経路情報が空となっています。\n" + ofd.FileName + "の中身に経路情報が存在するか確認してください。");
-
-                }
-                else
-                {
-                    label4.Text = $"経路名（路線名）: {cousedate.Route}";
-                    label5.Text = $"合計時間: {cousedate.TotalTime}";
-                }
             }
         }
     }

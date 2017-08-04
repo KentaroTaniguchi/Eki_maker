@@ -51,7 +51,7 @@
             this.botton1.TabIndex = 1;
             this.botton1.Text = "保存";
             this.botton1.UseVisualStyleBackColor = true;
-            this.botton1.Click += new System.EventHandler(this.Save);
+            this.botton1.Click += new System.EventHandler(this.btn_Write_Json);
             // 
             // frmResult
             // 
