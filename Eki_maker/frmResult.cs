@@ -35,21 +35,8 @@ namespace Eki_maker
             navi.AddKey(station1);
             navi.AddKey(station2);
             axExpDiaShowCoursePanel131.SearchCourse_A2();
-            
-            /*  try
-        {
-            axExpDiaShowCoursePanel131.SearchCourse_A2();
-        }
-        catch (System.Exception ex)
-        {
-            MessageBox.Show(ex.Message);
-
-        }*/
-
-
         }
       
-
         /// <summary>
         /// ボタンがクリックされた時
         /// 探索結果の情報をCouseDateの中に入れる。
